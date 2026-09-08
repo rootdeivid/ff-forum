@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="./assets/icon/icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="./css/login.css">
+    <script src="./js/sessao.js"></script>
+    <title>FF Forum - Login</title>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <ul class="navbar-nav">
+                <li><a href="./index.html">Início</a></li>
+                <li><a href="./cadastro.html">Cadastro</a></li>
+                <li><a href="./login.html">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="login">
+        <div class="alerta_erro">
+            <div class="card_erro" id="cardErro">
+                <span id="mensagem_erro"></span>
+            </div>
+        </div>
+        <div class="container">
+            <div class="card card-login">
+                <h2>Ola de volta!</h2>
+                <div class="formulario">
+                    <div class="campo">
+                        <span>E-mail:</span>
+                        <input id="email_input" type="text" placeholder="Login">
+                    </div>
+                    <div class="campo">
+                        <span>Senha:</span>
+                        <input id="senha_input" type="password" placeholder="******">
+                    </div>
+                    <button class="botao" onclick="entrar()">Entrar</button>
+                </div>
+                <div id="div_aguardar" class="loading-div">
+                    <img src="./assets/circle-loading.gif" id="loading-gif">
+                </div>
+                <div id="div_erros_login"></div>
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        <div class="container footer-container">
+            <img src="./assets/icon/icon.png" alt="Final Fantasy XIV Logo" class="footer-logo">
+            <ul class="footer-nav">
+                <li><a href="./index.html">Home</a></li>
+                <li><a href="./cadastro.html">Cadastro</a></li>
+                <li><a href="./login.html">Login</a></li>
+            </ul>
+            <p class="footer-copyright">© 2010 - 2024 SQUARE ENIX CO., LTD. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+</body>
+</html>
+
+<script>
+    const API_URL = "http://localhost:8080";
+    function entrar() {
+        aguardar();
+        var emailVar = email_input.value.trim();
+        var senhaVar = senha_input.value;
+        if (emailVar == "" || senhaVar == "") {
+            cardErro.style.display = "block"
+            mensagem_erro.innerHTML = "Preencha todos os campos";
+            finalizarAguardar();
+            return false;
+        }
+        if (!emailVar.includes("@")) {
+            cardErro.style.display = "block"
+            mensagem_erro.innerHTML = "Email invalido";
+            finalizarAguardar();
+            return false;
+        } else {
+            setTimeout(sumirMensagem, 5000)
+        }
+        const params = new URLSearchParams({ email: emailVar, senha: senhaVar });
+        fetch(`${API_URL}/api/usuarios/login?${params.toString()}`, {
+            method: "POST"
+        }).then(function (resposta) {
+            if (resposta.ok) {
+                resposta.json().then(json => {
+                    sessionStorage.EMAIL_USUARIO = json.EMAIL || json.email;
+                    sessionStorage.NOME_USUARIO = json.NOME || json.nome;
+                    sessionStorage.ID_USUARIO = json.ID || json.id;
+                    setTimeout(function () { window.location = "index.html"; }, 800);
+                });
+            } else {
+                resposta.json().then(d => {
+                    const msg = d.erro || "Email ou senha invalidos";
+                    finalizarAguardar(msg);
+                    cardErro.style.display = "block";
+                    mensagem_erro.innerHTML = msg;
+                }).catch(() => finalizarAguardar("Email ou senha invalidos"));
+            }
+        }).catch(function (erro) {
+            console.log(erro);
+            finalizarAguardar("Nao foi possivel conectar na API (http://localhost:8080)");
+        })
+        return false;
+    }
+    function sumirMensagem() { cardErro.style.display = "none" }
+</script>

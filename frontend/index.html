@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="./assets/icon/icon.png" type="image/x-icon">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/index.css">
+    <title>FF Forum - Final Fantasy XIV</title>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container navbar-container">
+            <ul class="navbar-nav">
+                <li><a href="./index.html">Início</a></li>
+                <li><a href="./cadastro.html">Cadastro</a></li>
+                <li><a href="./login.html">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+    <section class="intro-section">
+        <div class="intro-overlay">
+            <h1 class="intro-title">FF Forum</h1>
+            <p class="intro-subtitle">Uma comunidade do universo de Final Fantasy XIV. Onde há um mundo de fantasia épica, repleto de aventuras, aliados inesquecíveis e batalhas lendárias. Descubra Eorzea e escreva sua própria história.</p>
+        </div>
+    </section>
+    
+    <section class="banner-section">
+        <div class="container">
+            <h2 class="banner-title">Junte-se à Aventura!</h2>
+            <p class="banner-text">Milhões de jogadores já descobriram o mundo cativante de Eorzea. Com uma comunidade acolhedora e conteúdo constantemente atualizado, nunca houve melhor momento para começar sua jornada.</p>
+            <a href="./cadastro.html" class="button">Cadastre seu Aventureiro</a>
+            <div id="lista-usuarios" style="margin-top:30px; text-align:left; max-width:900px; margin-left:auto; margin-right:auto;"></div>
+        </div>
+    </section>
+    <section class="expansions-section">
+        <div class="container">
+            <h2 class="section-title">Expansões</h2>
+            <div class="expansions-container">
+                <div class="expansion-card">
+                    <img src="./assets/icon/arr.png" alt="A Realm Reborn" class="expansion-image">
+                    <div class="expansion-content">
+                        <h3 class="expansion-title">A Realm Reborn</h3>
+                        <p class="expansion-year">2013</p>
+                        <p class="expansion-description">A base do jogo, onde a jornada começa. Explore Eorzea e descubra as ameaças que pairam sobre o reino.</p>
+                    </div>
+                </div>
+                <div class="expansion-card">
+                    <img src="./assets/icon/heavens.webp" alt="Heavensward" class="expansion-image">
+                    <div class="expansion-content">
+                        <h3 class="expansion-title">Heavensward</h3>
+                        <p class="expansion-year">2015</p>
+                        <p class="expansion-description">Viaje para Ishgard e envolva-se na guerra milenar entre homens e dragões.</p>
+                    </div>
+                </div>
+                <div class="expansion-card">
+                    <img src="./assets/icon/shb.png" alt="Stormblood" class="expansion-image">
+                    <div class="expansion-content">
+                        <h3 class="expansion-title">Stormblood</h3>
+                        <p class="expansion-year">2017</p>
+                        <p class="expansion-description">Lute pela liberdade de Ala Mhigo e Doma contra a opressão do Império Garleano.</p>
+                    </div>
+                </div>
+                <div class="expansion-card">
+                    <img src="./assets/icon/shadowbringer.png" alt="Shadowbringers" class="expansion-image">
+                    <div class="expansion-content">
+                        <h3 class="expansion-title">Shadowbringers</h3>
+                        <p class="expansion-year">2019</p>
+                        <p class="expansion-description">Torne-se o Warrior of Darkness no First.</p>
+                    </div>
+                </div>
+                <div class="expansion-card">
+                    <img src="./assets/icon/endwalker.png" alt="Endwalker" class="expansion-image">
+                    <div class="expansion-content">
+                        <h3 class="expansion-title">Endwalker</h3>
+                        <p class="expansion-year">2021</p>
+                        <p class="expansion-description">Conclua a épica saga de Hydaelyn e Zodiark.</p>
+                    </div>
+                </div>
+                <div class="expansion-card">
+                    <img src="./assets/icon/dawntrail.png" alt="Dawntrail" class="expansion-image">
+                    <div class="expansion-content">
+                        <h3 class="expansion-title">Dawntrail</h3>
+                        <p class="expansion-year">2024</p>
+                        <p class="expansion-description">Nova aventura rumo a Tural, o Novo Mundo.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <footer class="footer">
+        <div class="container footer-container">
+            <img src="./assets/icon/icon.png" alt="Final Fantasy XIV Logo" class="footer-logo">
+            <ul class="footer-nav">
+                <li><a href="./index.html">Home</a></li>
+                <li><a href="./cadastro.html">Cadastro</a></li>
+                <li><a href="./login.html">Login</a></li>
+            </ul>
+            <p class="footer-copyright">© 2010 - 2024 SQUARE ENIX CO., LTD. Todos os direitos reservados. | FF Forum</p>
+        </div>
+    </footer>
+
+    <script>
+        const API_URL = "http://localhost:8080";
+        async function carregarUsuarios() {
+            const div = document.getElementById("lista-usuarios");
+            try {
+                const res = await fetch(`${API_URL}/api/usuarios`);
+                if (res.status === 204) {
+                    div.innerHTML = "<p style='text-align:center; color:#ccc;'>Nenhum aventureiro cadastrado ainda.</p>";
+                    return;
+                }
+                if (!res.ok) throw new Error();
+                const usuarios = await res.json();
+                div.innerHTML = "<h3 style='color:#ffcc00; margin-bottom:12px;'>Aventureiros cadastrados</h3>" + usuarios.map(u =>
+                    `<div style="background:#1a1a2e; border-radius:8px; padding:10px; margin:8px 0; color:#e0e0e0;">#${u.ID||u.id} - <b>${u.NOME||u.nome}</b> (${u.RACA||u.raca}) - ${u.CLASSE_NOME||u.classe_nome} - Nivel ${u.NIVEL||u.nivel}</div>`
+                ).join("");
+            } catch(e) {
+                div.innerHTML = "<p style='text-align:center; color:#ccc;'>API offline - inicie o backend em http://localhost:8080</p>";
+            }
+        }
+        carregarUsuarios();
+    </script>
+</body>
+</html>

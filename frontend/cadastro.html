@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="shortcut icon" href="./assets/icon/icon.png" type="image/x-icon">
+  <link rel="stylesheet" href="./css/cadastro.css">
+  <title>FF Forum - Cadastro</title>
+  <script src="./js/sessao.js"></script>
+</head>
+<body onload="carregarClasses()">
+  <nav class="navbar">
+    <div class="navbar-container">
+      <ul class="navbar-nav">
+        <li><a href="./index.html">Início</a></li>
+        <li><a href="./cadastro.html">Cadastro</a></li>
+        <li><a href="./login.html">Login</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="login">
+    <div class="alerta_erro">
+      <div class="card_erro" id="cardErro">
+        <span id="mensagem_erro"></span>
+      </div>
+    </div>
+    <div class="container">
+      <div class="card card-cadastro">
+        <h2>Cadastre seu Aventureiro</h2>
+        <div class="formulario">
+          <!-- Texto -->
+          <div class="campo">
+            <span>Nome *:</span>
+            <input id="nome_input" type="text" placeholder="Seu nome" />
+          </div>
+          <div class="campo">
+            <span>Apelido:</span>
+            <input id="apelido_input" type="text" placeholder="Seu apelido no jogo" />
+          </div>
+          <div class="campo">
+            <span>E-mail *:</span>
+            <input id="email_input" type="text" placeholder="meuemail@provedor.com" />
+          </div>
+          <!-- Numerico -->
+          <div class="campo">
+            <span>Nivel (1-100) *:</span>
+            <input id="nivel_input" type="number" min="1" max="100" placeholder="80" />
+          </div>
+          <!-- Data -->
+          <div class="campo">
+            <span>Data de Nascimento *:</span>
+            <input id="data_nascimento_input" type="date" />
+          </div>
+          <!-- Radio Buttons - Raca -->
+          <div class="campo">
+            <span>Raca *:</span>
+            <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:8px;">
+              <label><input type="radio" name="raca" value="Hyur" /> Hyur</label>
+              <label><input type="radio" name="raca" value="Miqo'te" /> Miqo'te</label>
+              <label><input type="radio" name="raca" value="Elezen" /> Elezen</label>
+              <label><input type="radio" name="raca" value="Roegadyn" /> Roegadyn</label>
+              <label><input type="radio" name="raca" value="Lalafell" /> Lalafell</label>
+              <label><input type="radio" name="raca" value="Au Ra" /> Au Ra</label>
+              <label><input type="radio" name="raca" value="Hrothgar" /> Hrothgar</label>
+              <label><input type="radio" name="raca" value="Viera" /> Viera</label>
+            </div>
+          </div>
+          <!-- Dropdown dinamico via API -->
+          <div class="campo">
+            <span>Classe * (carregado via API):</span>
+            <select id="classe_select">
+              <option value="">Carregando classes...</option>
+            </select>
+          </div>
+          <div class="campo">
+            <span>Data Center:</span>
+            <select id="datacenter_select">
+              <option value="">Selecione</option>
+              <option value="Aether">Aether</option>
+              <option value="Primal">Primal</option>
+              <option value="Crystal">Crystal</option>
+              <option value="Light">Light</option>
+              <option value="Chaos">Chaos</option>
+              <option value="Materia">Materia</option>
+            </select>
+          </div>
+          <div class="campo">
+            <span>Senha *:</span>
+            <input id="senha_input" type="password" placeholder="******" />
+          </div>
+          <div class="campo">
+            <span>Confirmacao da Senha *:</span>
+            <input id="confirmacao_senha_input" type="password" placeholder="******" />
+          </div>
+          <!-- Checkbox -->
+          <div class="campo" style="flex-direction:row; align-items:center; gap:8px;">
+            <input id="termos_input" type="checkbox" />
+            <span>Aceito os termos de uso *</span>
+          </div>
+          <div class="campo" style="flex-direction:row; align-items:center; gap:8px;">
+            <input id="newsletter_input" type="checkbox" />
+            <span>Quero receber novidades</span>
+          </div>
+
+          <button class="botao" onclick="cadastrar()">Cadastrar</button>
+        </div>
+        <div id="div_aguardar" class="loading-div">
+          <img src="./assets/circle-loading.gif" id="loading-gif" />
+        </div>
+        <div id="div_erros_login"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container footer-container">
+      <img src="./assets/icon/icon.png" alt="Final Fantasy XIV Logo" class="footer-logo">
+      <ul class="footer-nav">
+        <li><a href="./index.html">Home</a></li>
+        <li><a href="./cadastro.html">Cadastro</a></li>
+        <li><a href="./login.html">Login</a></li>
+      </ul>
+      <p class="footer-copyright">© 2010 - 2024 SQUARE ENIX CO., LTD. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+</body>
+</html>
+
+<script>
+  const API_URL = "http://localhost:8080";
+
+  async function carregarClasses() {
+    const select = document.getElementById("classe_select");
+    try {
+      const res = await fetch(`${API_URL}/api/classes`);
+      if (res.status === 204) {
+        select.innerHTML = '<option value="">Nenhuma classe encontrada</option>';
+        return;
+      }
+      if (!res.ok) throw new Error("Erro ao carregar classes");
+      const classes = await res.json();
+      select.innerHTML = '<option value="">Selecione sua classe</option>';
+      classes.forEach(c => {
+        const opt = document.createElement("option");
+        opt.value = c.ID || c.id;
+        opt.textContent = `${c.NOME || c.nome} (${c.TIPO || c.tipo})`;
+        select.appendChild(opt);
+      });
+    } catch (e) {
+      console.error(e);
+      select.innerHTML = '<option value="">Erro ao carregar</option>';
+      cardErro.style.display = "block";
+      mensagem_erro.innerHTML = "Nao foi possivel carregar as classes. Verifique se a API esta rodando em http://localhost:8080";
+    }
+  }
+
+  function validarFront() {
+    const nome = nome_input.value.trim();
+    const email = email_input.value.trim();
+    const senha = senha_input.value;
+    const confirmacao = confirmacao_senha_input.value;
+    const dataNasc = data_nascimento_input.value;
+    const racaEl = document.querySelector('input[name="raca"]:checked');
+    const classeId = classe_select.value;
+    const nivel = nivel_input.value;
+    const termos = termos_input.checked;
+    if (!nome || nome.length < 3) return "Nome obrigatorio (min 3 caracteres)";
+    if (!email || !email.includes("@")) return "Email invalido";
+    if (!senha || senha.length < 6) return "Senha deve ter pelo menos 6 caracteres";
+    if (senha !== confirmacao) return "Senhas nao conferem";
+    if (!dataNasc) return "Data de nascimento obrigatoria";
+    if (new Date(dataNasc) > new Date()) return "Data nao pode ser no futuro";
+    if (!racaEl) return "Selecione uma raca";
+    if (!classeId) return "Selecione uma classe (dropdown)";
+    if (!nivel || nivel < 1 || nivel > 100) return "Nivel deve ser entre 1 e 100";
+    if (!termos) return "Voce deve aceitar os termos";
+    return null;
+  }
+
+  async function cadastrar() {
+    const erroFront = validarFront();
+    if (erroFront) {
+      cardErro.style.display = "block";
+      mensagem_erro.innerHTML = erroFront;
+      setTimeout(sumirMensagem, 5000);
+      return false;
+    }
+    const raca = document.querySelector('input[name="raca"]:checked').value;
+    const params = new URLSearchParams({
+      nome: nome_input.value.trim(),
+      apelido: apelido_input.value.trim(),
+      email: email_input.value.trim(),
+      senha: senha_input.value,
+      dataNascimento: data_nascimento_input.value,
+      raca: raca,
+      classeId: classe_select.value,
+      dataCenter: datacenter_select.value,
+      nivel: nivel_input.value,
+      aceitaTermos: termos_input.checked
+    });
+    try {
+      const resposta = await fetch(`${API_URL}/api/usuarios?${params.toString()}`, {
+        method: "POST"
+      });
+      if (resposta.ok) {
+        cardErro.style.display = "block";
+        mensagem_erro.innerHTML = "Cadastro realizado com sucesso! Redirecionando para login...";
+        setTimeout(() => window.location = "login.html", 1500);
+      } else {
+        const dados = await resposta.json().catch(() => ({ erro: "Erro desconhecido" }));
+        cardErro.style.display = "block";
+        mensagem_erro.innerHTML = dados.erro || `Erro ${resposta.status}`;
+        setTimeout(sumirMensagem, 5000);
+      }
+    } catch (e) {
+      console.error(e);
+      cardErro.style.display = "block";
+      mensagem_erro.innerHTML = "Nao foi possivel conectar na API. Verifique se o backend esta rodando.";
+    }
+    return false;
+  }
+
+  function sumirMensagem() { cardErro.style.display = "none"; }
+</script>

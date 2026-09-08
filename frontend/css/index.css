@@ -1,0 +1,230 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #0a0a1a;
+    color: #e0e0e0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.navbar {
+    background-image: url(../assets/imgs/navbar.jpg);
+    background-size: 100% auto;
+    color: black;
+    background-color: #1a1a2e;
+    padding: 10px 0;
+    position: sticky;
+    z-index: 100;
+    top: 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.navbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-logo {
+    height: 40px;
+}
+
+.navbar-nav {
+    display: flex;
+    list-style: none;
+}
+
+.navbar-nav li {
+    margin-left: 20px;
+}
+
+.navbar-nav a {
+    color: black;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.intro-section {
+    background-image: url(../assets/imgs/birthday21.jpg);
+    background-size: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    height: 80vh;
+}
+
+.intro-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.7);
+}
+
+.intro-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 20px;
+}
+
+.intro-title {
+    position: absolute;
+    top: 20%;
+    left: 55%;
+    font-size: 3rem;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    color: #ffcc00;
+}
+
+.intro-subtitle {
+    position: absolute;
+    left: 50%;
+    text-align: justify;
+    color: #0a0a1a;
+    font-size: 1.5rem;
+    max-width: 600px;
+    margin-bottom: 30px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.banner-section {
+    background-image: url(../assets/imgs/maybanner3.jpg);
+    padding: 60px 0;
+    text-align: center;
+}
+
+.banner-title {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: black;
+}
+
+.banner-text {
+    font-size: 1.2rem;
+    max-width: 800px;
+    margin: 0 auto 30px;
+    font-size: 1.3rem;
+    color: black;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.button {
+    display: inline-block;
+    background-color: #ffcc00;
+    color: #1a1a2e;
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: all 0.3s;
+}
+
+.expansions-section {
+    padding: 80px 0;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 50px;
+    color: #ffcc00;
+}
+
+.expansions-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+}
+
+.expansion-card {
+    background-color: #1a1a2e;
+    border-radius: 10px;
+    width: 300px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.expansion-image {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.expansion-content {
+    padding: 20px;
+}
+
+.expansion-title {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #ffcc00;
+}
+
+.expansion-year {
+    color: #aaa;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+}
+
+.expansion-description {
+    font-size: 0.95rem;
+}
+
+.footer {
+    background-color: #1a1a2e;
+    padding: 40px 0 20px;
+}
+
+.footer-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.footer-logo {
+    height: 60px;
+    margin-bottom: 20px;
+}
+
+.footer-nav {
+    display: flex;
+    list-style: none;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.footer-nav li {
+    margin: 0 15px;
+}
+
+.footer-nav a {
+    color: #e0e0e0;
+    text-decoration: none;
+}
+
+.footer-copyright {
+    color: white;
+    font-size: 0.9rem;
+    text-align: center;
+    margin-top: 20px;
+}
